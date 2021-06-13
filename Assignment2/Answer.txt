@@ -1,0 +1,71 @@
+    Output explanation
+     0
+     1
+     2
+     3
+     4
+     5
+    - first the for loop is executed and runs till the condition is met. as it is synchronous, it 
+    waits for execution of whole loop.
+
+     Hello - hello is printed as it is synchronous operation
+
+
+     In SetTimeout with timer 0
+     Rahul
+     Ramesh
+     Second SetTimeout with timer as 0
+     Third SetTimeout with timer as 0
+     
+     -- then setTimeout is called, and it is pushed in call stack, then to node API as it is asynchronous,
+        as time 0 is second it is pushed in callback queue, event loop manages callback queue and call stack,
+        as call stack is empty it is pushed in call stack and executed.
+    -- Same procedure is followed by nested setTimeouts, and console.log of all setTimeout is printed
+
+        Event Loop - it allows node js to perform asynchronous operations. Node js is single threaded,
+        in this, if an operation is taking time(such as database connection, setTimeout etc) then operations
+        are offloaded to system kernel whenever possible.It monitors callback queue and call stack, and pushes
+        operations to call stack, when call stack is empty.
+
+        Node API - whenever there is an asynchronous operation, and the operation requires some time to complete,
+        operation is pushed to node api from call stack, as node is single threaded, when the async operation is 
+        complete, it is pushed to callback queue by node api
+
+        Call Stack - Call stack is basically a data structure that uses LIFO(Last in first out), it is basically the
+        sequence of operation to be performed, it is synchronous, when asynchronous operation is encountered it is 
+        pushed to Node api.It takes completed operation from callback queue and executes the operation.
+
+        CallBack queue- The function in the callback queue are executed when the callstack is empty.asynchronous operations
+        wait for the execution, and executes when callstack is empty.
+
+        Callback Hell - In this, each and every callback takes an argument that is a result of the previous 
+        callbacks. In this manner, The code structure looks like a pyramid, making it difficult to 
+        read and maintain. Also, if there is an error in one function, then all other functions get 
+        affected.
+
+        To avoid callback hell, we use promises
+        We can use promise in our code to avoid callback hell,
+
+        function promise (){
+            return new Promise(function(resolve,reject){
+                setTimeout(resolve,0)
+            }).then(function(){
+                console.log("In SetTimeout with timer 0")
+            }).then(function(){
+                setTimeout( () => {
+  
+                LoopNames(["Rahul", "Ramesh"])
+  
+            }).then(function(){
+                console.log("Second SetTimeout with timer as 0")
+            }).then(function(){
+                setTimeout( () => {
+  
+                console.log("Third SetTimeout with timer as 0")
+  
+             },0)
+            })
+        }
+
+
+
